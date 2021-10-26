@@ -3,7 +3,7 @@ import React, { useMemo } from "react"
 
 import {
   ConnectionProvider,
-  WalletProvider
+  WalletProvider,
 } from "@solana/wallet-adapter-react"
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base"
 import {
@@ -11,7 +11,7 @@ import {
   getPhantomWallet,
   getSolflareWallet,
   getSolletWallet,
-  getTorusWallet
+  getTorusWallet,
 } from "@solana/wallet-adapter-wallets"
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
 
@@ -21,17 +21,17 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
  * Then the rest of the page can be rendered on server
  */
 const WalletProviderSection = ({
-  children
+  children,
 }: {
   children: React.ReactChild
 }) => {
   const network = process.env
-    .NEXT_PUBLIC_CONNECTION_NETWORK as WalletAdapterNetwork
+    .REACT_APP_CONNECTION_NETWORK as WalletAdapterNetwork
 
   const endpoint =
-    process.env.NEXT_PUBLIC_CONNECTION_NETWORK == "devnet"
-      ? process.env.NEXT_PUBLIC_SOLANA_RPC_HOST_DEVNET
-      : process.env.NEXT_PUBLIC_SOLANA_RPC_HOST_MAINNET_BETA
+    process.env.REACT_APP_CONNECTION_NETWORK == "devnet"
+      ? process.env.REACT_APP_SOLANA_RPC_HOST_DEVNET
+      : process.env.REACT_APP_SOLANA_RPC_HOST_MAINNET_BETA
 
   // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking --
   // Only the wallets you configure here will be compiled into your application
@@ -42,8 +42,8 @@ const WalletProviderSection = ({
       getSolletWallet({ network }),
       getLedgerWallet(),
       getTorusWallet({
-        options: { clientId: "Get a client ID @ https://developer.tor.us" }
-      })
+        options: { clientId: "Get a client ID @ https://developer.tor.us" },
+      }),
     ],
     [network]
   )
@@ -54,14 +54,12 @@ const WalletProviderSection = ({
     <ConnectionProvider
       config={{
         commitment: "confirmed",
-        confirmTransactionInitialTimeout: 180 * 1000
+        confirmTransactionInitialTimeout: 180 * 1000,
       }}
       endpoint={endpoint}
     >
       <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider logo="/images/logo.png">
-          {children}
-        </WalletModalProvider>
+        <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   )
