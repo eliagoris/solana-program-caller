@@ -1,14 +1,14 @@
-import { web3, Program, Provider, Wallet } from "@project-serum/anchor"
+import { web3, Program, Provider } from "@project-serum/anchor"
 import { WalletContextState } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
 
 const callProgram = async (wallet: WalletContextState) => {
   const endpoint =
-    process.env.REACT_APP_CONNECTION_NETWORK == "devnet"
+    process.env.REACT_APP_CONNECTION_NETWORK === "devnet"
       ? process.env.REACT_APP_SOLANA_RPC_HOST_DEVNET
       : process.env.REACT_APP_SOLANA_RPC_HOST_MAINNET_BETA
 
-  if (!endpoint) throw "No RPC endpoint configured."
+  if (!endpoint) throw new Error("No RPC endpoint configured.")
 
   const solConnection = new web3.Connection(endpoint, "confirmed")
 
@@ -18,7 +18,7 @@ const callProgram = async (wallet: WalletContextState) => {
     signTransaction: wallet.signTransaction,
   } as any
 
-  if (!wallet.publicKey) throw "No public key."
+  if (!wallet.publicKey) throw new Error("No public key.")
 
   const provider = new Provider(solConnection, anchorWallet, {
     preflightCommitment: "recent",
@@ -31,12 +31,12 @@ const callProgram = async (wallet: WalletContextState) => {
   const idl = await Program.fetchIdl(programId, provider)
 
   if (!idl)
-    throw (
+    throw new Error(
       "No idl with address " +
-      programId.toString() +
-      " has been found on " +
-      process.env.REACT_APP_CONNECTION_NETWORK +
-      "."
+        programId.toString() +
+        " has been found on " +
+        process.env.REACT_APP_CONNECTION_NETWORK +
+        "."
     )
 
   const anchorProgram = new Program(idl, programId, provider)

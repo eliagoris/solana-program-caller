@@ -29,7 +29,7 @@ const WalletProviderSection = ({
     .REACT_APP_CONNECTION_NETWORK as WalletAdapterNetwork
 
   const endpoint =
-    process.env.REACT_APP_CONNECTION_NETWORK == "devnet"
+    process.env.REACT_APP_CONNECTION_NETWORK === "devnet"
       ? process.env.REACT_APP_SOLANA_RPC_HOST_DEVNET
       : process.env.REACT_APP_SOLANA_RPC_HOST_MAINNET_BETA
 

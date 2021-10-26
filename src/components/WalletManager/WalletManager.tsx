@@ -1,7 +1,7 @@
 /** @jsxImportSource theme-ui */
 import { useWallet } from "@solana/wallet-adapter-react"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
-import { Button, Flex, Text } from "theme-ui"
+import { Flex } from "theme-ui"
 
 const WalletManager = () => {
   const wallet = useWallet()
